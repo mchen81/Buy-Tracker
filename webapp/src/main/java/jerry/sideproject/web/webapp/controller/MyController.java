@@ -1,4 +1,5 @@
 package jerry.sideproject.web.webapp.controller;
+//      jerry.sideproject.web.webapp;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,27 +25,21 @@ public class MyController {
     }
 
     @PostMapping("/upload")
-    public String singleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
+    public String singleFileUpload(@RequestParam("file") MultipartFile file, Model theModel) {
         if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return "redirect:uploadStatus";
+            theModel.addAttribute("message", "Please select a file to upload");
+            return "uploadResult";
         }
-
         try {
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
-
-            redirectAttributes.addFlashAttribute("message",
+            theModel.addAttribute("message",
                     "You successfully uploaded '" + file.getOriginalFilename() + "'");
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return "redirect:/uploadResult";
+        return "uploadResult";
     }
-
 }
