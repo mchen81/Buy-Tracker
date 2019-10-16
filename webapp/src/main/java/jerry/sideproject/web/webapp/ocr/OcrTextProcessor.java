@@ -1,7 +1,7 @@
 package jerry.sideproject.web.webapp.ocr;
 
-import jerry.sideproject.web.bean.BuyingList;
-import jerry.sideproject.web.bean.Item;
+import jerry.sideproject.web.webapp.bean.BuyingList;
+import jerry.sideproject.web.webapp.bean.Item;
 
 /**
  * Process the text from OCR result
