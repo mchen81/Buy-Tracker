@@ -1,4 +1,4 @@
-package jerry.sideproject.web.ocr;
+package jerry.sideproject.web.webapp.ocr;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;

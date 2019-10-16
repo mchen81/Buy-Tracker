@@ -1,4 +1,4 @@
-package jerry.sideproject.web.bean;
+package jerry.sideproject.web.webapp.bean;
 
 /**
  * Buying Item

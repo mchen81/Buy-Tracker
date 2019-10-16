@@ -8,10 +8,10 @@
 		<version>2.1.9.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>jerry.sideproject</groupId>
-	<artifactId>web</artifactId>
+	<groupId>jerry.sideproject.web</groupId>
+	<artifactId>webapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>web</name>
+	<name>webapp</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -21,19 +21,23 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sourceforge.tess4j</groupId>
-			<artifactId>tess4j</artifactId>
-			<version>4.4.1</version>
 		</dependency>
 	</dependencies>
 

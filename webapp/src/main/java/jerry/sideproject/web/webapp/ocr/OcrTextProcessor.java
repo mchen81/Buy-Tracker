@@ -1,4 +1,4 @@
-package jerry.sideproject.web.ocr;
+package jerry.sideproject.web.webapp.ocr;
 
 import jerry.sideproject.web.bean.BuyingList;
 import jerry.sideproject.web.bean.Item;
