@@ -1,12 +1,20 @@
 package jerry.sideproject.web.webapp.bean;
 
-/**
- * Buying Item
- */
 public class Item {
 
+    private long id;
+
     private String name;
+
     private Double price;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -24,15 +32,46 @@ public class Item {
         this.price = price;
     }
 
-    /**
-     * @return true where name or price is empty or 0
-     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + (int) (id ^ (id >>> 32));
+        result = prime * result + ((price == null) ? 0 : price.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Item other = (Item) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (id != other.id)
+            return false;
+        if (price == null) {
+            if (other.price != null)
+                return false;
+        } else if (!price.equals(other.price))
+            return false;
+        return true;
+    }
+
     public boolean isEmpty() {
-        return null == name || null == price || name.trim().length() == 0 || price == 0.0F;
+        return name == null || price == null || name.isEmpty() || price.isNaN();
     }
 
     @Override
     public String toString() {
-        return String.format("%s: $%.2f", name, price);
+        return "Book [id=" + id + ", name=" + name + ", price=" + price + "]";
     }
 }

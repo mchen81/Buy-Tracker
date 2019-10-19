@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Items</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1> Edit Items </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-info" href="#" th:href="@{/items/all}"> Back to All Items </a>
+            <form action="#" class="form-horizontal"
+                  th:action="@{/items/save}"
+                  th:object="${form}"
+                  method="post">
+                <fieldset>
+					<span class="pull-right">
+						    <input type="submit" id="submitButton" class="btn btn-success" th:value="Save">
+						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="Reset"/>
+					</span>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th> Item Name</th>
+                            <th> Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item, itemStat : ${form.items}">
+                            <td><input hidden th:name="|items[${itemStat.index}].id|" th:value="${item.getId()}"/></td>
+                            <td><input th:placeholder="Name + ' ' + ${itemStat.count}"
+                                       th:name="|items[${itemStat.index}].name|" th:value="${item.getName()}"
+                                       required/></td>
+                            <td><input th:placeholder="Price + ' ' + ${itemStat.count}"
+                                       th:name="|items[${itemStat.index}].price|"
+                                       th:value="${item.getPrice()}" required/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
