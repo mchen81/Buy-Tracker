@@ -36,9 +36,9 @@ public class InMemoryItemService implements ItemService {
     @Override
     public Double getTotalAmount() {
         if (itemsDB.isEmpty()) {
-            return Double.NaN;
+            return 0D;
         }
-        Double total = Double.NaN;
+        Double total = 0D;
         for (Item item : findAll()) {
             total += item.getPrice();
         }

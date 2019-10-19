@@ -24,6 +24,7 @@ public class MultipleItemsController {
     @GetMapping(value = "/all")
     public String showAll(Model model) {
         model.addAttribute("items", itemService.findAll());
+        model.addAttribute("total", itemService.getTotalAmount());
         return "allItems";
     }
 
@@ -48,9 +49,10 @@ public class MultipleItemsController {
     }
 
     @PostMapping(value = "/save")
-    public String saveBooks(@ModelAttribute ItemsCreationDto form, Model model) {
+    public String saveItems(@ModelAttribute ItemsCreationDto form, Model model) {
         itemService.saveAll(form.getItems());
         model.addAttribute("items", itemService.findAll());
+        model.addAttribute("total", itemService.getTotalAmount());
         return "redirect:/items/all";
     }
 }
