@@ -57,10 +57,20 @@ public class OcrController {
         }
     }
 
+    /**
+     * parse image file by ocr process
+     * @param filePath Path
+     * @return a item list
+     */
     private List<Item> parseImage(Path filePath) {
         return ocrServices.imageRecognize(filePath);
     }
 
+    /**
+     *
+     * @param file file name
+     * @return true if file is png or jpg
+     */
     private boolean isValidImageFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         if (fileName.endsWith("png") || fileName.endsWith("jpg")) {
