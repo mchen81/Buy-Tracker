@@ -35,7 +35,7 @@
                             <td><input hidden th:name="|items[${itemStat.index}].id|" th:value="${item.getId()}"/></td>
                             <td><input th:placeholder="Name + ' ' + ${itemStat.count}"
                                        th:name="|items[${itemStat.index}].name|" th:value="${item.getName()}"
-                                       required/></td>
+                                       /></td>
                             <td><input th:placeholder="Price + ' ' + ${itemStat.count}"
                                        th:name="|items[${itemStat.index}].price|"
                                        th:value="${item.getPrice()}" required/></td>

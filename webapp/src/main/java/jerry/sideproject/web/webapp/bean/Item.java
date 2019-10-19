@@ -71,7 +71,7 @@ public class Item {
     }
 
     public boolean isEmpty() {
-        return name == null || price == null || name.isEmpty() || price.isNaN();
+        return name == null || price == null || name.trim().isEmpty() || price.isNaN();
     }
 
     @Override

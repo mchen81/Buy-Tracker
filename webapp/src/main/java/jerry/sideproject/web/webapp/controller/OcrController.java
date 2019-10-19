@@ -49,6 +49,7 @@ public class OcrController {
             model.addAttribute("message", "You successfully uploaded '" + file.getOriginalFilename() + "'");
             itemService.saveAll(parseImage(path));
             model.addAttribute("items", itemService.findAll());
+            model.addAttribute("total", String.format("%2f", itemService.getTotalAmount()));
             return "allItems";
         } catch (IOException e) {
             e.printStackTrace();
