@@ -47,7 +47,7 @@ public class MultipleItemsController {
                 .forEachRemaining(items::add);
         model.addAttribute("form", new ItemsCreationDto(items));
         model.addAttribute("total", String.format("%2f", itemService.getTotalAmount()));
-        return "editItemssForm";
+        return "editItemsForm";
     }
 
     @PostMapping(value = "/save")
