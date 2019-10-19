@@ -11,8 +11,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class InMemoryItemService implements ItemService {
+public class ItemServiceImplement implements ItemService {
 
+    /**
+     * storing current items with incremented id
+     */
     static Map<Long, Item> itemsDB = new HashMap<>();
 
     @Override
@@ -23,7 +26,7 @@ public class InMemoryItemService implements ItemService {
     @Override
     public void saveAll(List<Item> items) {
         long nextId = getNextId();
-        items.removeIf(i -> i.isEmpty());
+        items.removeIf(i -> i.isEmpty()); // remove the item if it's empty
         for (Item item : items) {
             if (item.getId() == 0) {
                 item.setId(nextId++);
@@ -45,6 +48,9 @@ public class InMemoryItemService implements ItemService {
         return total;
     }
 
+    /**
+     * @return current max id + 1
+     */
     private Long getNextId() {
         return itemsDB.keySet()
                 .stream()

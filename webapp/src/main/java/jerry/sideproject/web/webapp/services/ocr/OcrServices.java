@@ -59,9 +59,9 @@ public class OcrServices {
         Item item = new Item();
         String[] words = line.split(" "); // to get the last element(price)
         try {
-            item.setPrice(Double.valueOf(words[words.length - 1]));
+            item.setPrice(words[words.length - 1]);
         } catch (NumberFormatException e) {
-            item.setPrice(Double.NaN);
+            item.setPrice("0");
         }
         String itemName = "";
         for (int i = 0; i < words.length - 2; i++) {

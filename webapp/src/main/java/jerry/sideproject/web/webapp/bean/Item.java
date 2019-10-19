@@ -28,8 +28,12 @@ public class Item {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrice(String price) {
+        try {
+            this.price = Double.valueOf(price);
+        } catch (Exception e) {
+            this.price = 0D;
+        }
     }
 
     @Override
