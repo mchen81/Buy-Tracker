@@ -72,7 +72,7 @@ public class OcrController {
      */
     private boolean isValidImageFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
-        if (fileName.endsWith("png") || fileName.endsWith("jpg")) {
+        if (fileName.toLowerCase().endsWith("png") || fileName.toLowerCase().endsWith("jpg")) {
             return true;
         } else {
             return false;
