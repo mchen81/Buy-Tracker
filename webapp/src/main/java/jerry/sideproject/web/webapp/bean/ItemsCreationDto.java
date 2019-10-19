@@ -23,7 +23,7 @@ public class ItemsCreationDto {
         this.items = items;
     }
 
-    public void addBook(Item item) {
+    public void addItem(Item item) {
         this.items.add(item);
     }
 }

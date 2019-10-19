@@ -37,8 +37,8 @@ public class OcrController {
 
     @PostMapping("/uploadImage")
     public String singleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
-        if (file.isEmpty()) {
-            model.addAttribute("message", "Please select a file to upload");
+        if (file.isEmpty() || !isValidImageFile(file)) {
+            model.addAttribute("message", "Please select .jpg or .png file to upload");
             return "uploadForm";
         }
         try {
@@ -46,8 +46,7 @@ public class OcrController {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
-            model.addAttribute("message",
-                    "You successfully uploaded '" + file.getOriginalFilename() + "'");
+            model.addAttribute("message", "You successfully uploaded '" + file.getOriginalFilename() + "'");
             itemService.saveAll(parseImage(path));
             model.addAttribute("items", itemService.findAll());
             return "allItems";
@@ -57,7 +56,16 @@ public class OcrController {
         }
     }
 
-    private List<Item> parseImage(Path filepath) {
-        return ocrServices.imageRecognize(filepath);
+    private List<Item> parseImage(Path filePath) {
+        return ocrServices.imageRecognize(filePath);
+    }
+
+    private boolean isValidImageFile(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        if (fileName.endsWith("png") || fileName.endsWith("jpg")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

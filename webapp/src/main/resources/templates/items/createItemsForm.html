@@ -31,8 +31,8 @@
 						</thead>
 						<tbody>
 						<tr th:each="item, itemStat : *{items}">
-							<td><input th:placeholder="Name + ' ' + ${itemStat.count}" th:field="*{items[__${itemStat.index}__].name}" required/></td>
-							<td><input th:placeholder="Price + ' ' + ${itemStat.count}" th:field="*{items[__${itemStat.index}__].price}" required/></td>
+							<td><input th:placeholder="Name + ' ' + ${itemStat.count}" th:field="*{items[__${itemStat.index}__].name}" /></td>
+							<td><input th:placeholder="Price + ' ' + ${itemStat.count}" th:field="*{items[__${itemStat.index}__].price}" /></td>
 						</tr>
 						</tbody>
 					</table>

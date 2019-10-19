@@ -23,13 +23,13 @@ public class InMemoryItemService implements ItemService {
     @Override
     public void saveAll(List<Item> items) {
         long nextId = getNextId();
+        items.removeIf(i -> i.isEmpty());
         for (Item item : items) {
             if (item.getId() == 0) {
                 item.setId(nextId++);
             }
         }
-        Map<Long, Item> itemsMap = items.stream()
-                .collect(Collectors.toMap(Item::getId, Function.identity()));
+        Map<Long, Item> itemsMap = items.stream().collect(Collectors.toMap(Item::getId, Function.identity()));
         itemsDB.putAll(itemsMap);
     }
 

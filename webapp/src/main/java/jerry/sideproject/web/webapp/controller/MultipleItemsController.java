@@ -31,7 +31,7 @@ public class MultipleItemsController {
     public String showCreateForm(Model model) {
         ItemsCreationDto itemForm = new ItemsCreationDto();
         for (int i = 1; i <= 3; i++) {
-            itemForm.addBook(new Item());
+            itemForm.addItem(new Item());
         }
         model.addAttribute("form", itemForm);
         return "createItemsForm";
