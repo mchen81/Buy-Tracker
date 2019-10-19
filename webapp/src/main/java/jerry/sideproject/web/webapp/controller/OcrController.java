@@ -1,5 +1,4 @@
 package jerry.sideproject.web.webapp.controller;
-//      jerry.sideproject.web.webapp;
 
 import jerry.sideproject.web.webapp.bean.Item;
 import jerry.sideproject.web.webapp.services.ItemService;
