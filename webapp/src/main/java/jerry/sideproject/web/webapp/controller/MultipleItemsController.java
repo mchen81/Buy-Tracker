@@ -57,4 +57,17 @@ public class MultipleItemsController {
         model.addAttribute("total", String.format("%2f", itemService.getTotalAmount()));
         return "redirect:/items/all";
     }
+
+    @PostMapping(value = "/submitToDB")
+    public String submit() {
+        return "TODO"; // TODO
+    }
+
+    @GetMapping(value = "/clear")
+    public String clear(Model model) {
+        itemService.clear();
+        model.addAttribute("items", itemService.findAll());
+        model.addAttribute("total", String.format("%2f", itemService.getTotalAmount()));
+        return "redirect:/items/all";
+    }
 }

@@ -48,6 +48,11 @@ public class ItemServiceImplement implements ItemService {
         return total;
     }
 
+    @Override
+    public void clear() {
+        itemsDB = new HashMap<>();
+    }
+
     /**
      * @return current max id + 1
      */

@@ -25,4 +25,6 @@ public interface ItemService {
      * @return total spending of current items
      */
     Double getTotalAmount();
+
+    void clear();
 }

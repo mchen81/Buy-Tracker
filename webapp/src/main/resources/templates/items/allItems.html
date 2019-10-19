@@ -42,6 +42,10 @@
             <a class="btn btn-success" href="#" th:href="@{/items/create}"> Add Items </a>
             <a class="btn btn-primary" href="#" th:href="@{/items/edit}"
                th:classappend="${items.empty} ? 'disabled' : ''"> Edit Items </a>
+            <a class="btn btn-primary" href="#" th:href="@{/items/submitToDB}"
+               th:classappend="${items.empty} ? 'disabled' : ''"> Submit </a>
+            <a class="btn btn-success" href="#" th:href="@{/items/clear}"> Clear </a>
+
         </div>
     </div>
 </div>
