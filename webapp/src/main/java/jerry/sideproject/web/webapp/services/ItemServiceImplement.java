@@ -53,6 +53,13 @@ public class ItemServiceImplement implements ItemService {
         itemsDB = new HashMap<>();
     }
 
+    @Override
+    public void remove(Long id) {
+        if (itemsDB.containsKey(id)) {
+            itemsDB.remove(id);
+        }
+    }
+
     /**
      * @return current max id + 1
      */

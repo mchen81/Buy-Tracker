@@ -36,6 +36,10 @@ public class Item {
         }
     }
 
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

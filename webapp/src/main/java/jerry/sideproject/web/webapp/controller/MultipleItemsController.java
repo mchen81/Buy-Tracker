@@ -45,6 +45,7 @@ public class MultipleItemsController {
                 .iterator()
                 .forEachRemaining(items::add);
         model.addAttribute("form", new ItemsCreationDto(items));
+        model.addAttribute("idList", new ArrayList<Long>());
         return "editItemsForm";
     }
 
@@ -52,6 +53,14 @@ public class MultipleItemsController {
     public String saveItems(@ModelAttribute ItemsCreationDto form, Model model) {
         itemService.saveAll(form.getItems());
         model.addAttribute("items", itemService.findAll());
+        return "redirect:/items/all";
+    }
+
+    @PostMapping(value = "/saveEdition")
+    public String saveEdition(@ModelAttribute ItemsCreationDto form, @ModelAttribute ArrayList<Long> idList, Model model) {
+        itemService.saveAll(form.getItems());
+        model.addAttribute("items", itemService.findAll());
+        System.out.println(idList);
         return "redirect:/items/all";
     }
 

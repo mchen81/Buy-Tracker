@@ -26,5 +26,15 @@ public interface ItemService {
      */
     Double getTotalAmount();
 
+    /**
+     * reset items data
+     */
     void clear();
+
+    /**
+     * remove an item by id
+     * @param Id item's id
+     */
+    void remove(Long Id);
+
 }
