@@ -38,9 +38,9 @@
                                        /></td>
                             <td><input th:placeholder="Price + ' ' + ${itemStat.count}"
                                        th:name="|items[${itemStat.index}].price|"
-                                       th:value="${item.getPrice()}" required/></td>
+                                       th:value="${item.getPrice()}" /></td>
 
-                            <td><input type="checkbox" th:field="${idList}" th:path="${idList}" th:value=${item.getId()} /></td>
+                            <td><input type="checkbox" name="deleteItems" th:text=" REMOVE" th:value=${item.getId()} /></td>
 
                         </tr>
                         </tbody>

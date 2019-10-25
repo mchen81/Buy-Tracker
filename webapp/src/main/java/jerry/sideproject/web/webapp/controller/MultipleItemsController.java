@@ -6,10 +6,7 @@ import jerry.sideproject.web.webapp.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +42,6 @@ public class MultipleItemsController {
                 .iterator()
                 .forEachRemaining(items::add);
         model.addAttribute("form", new ItemsCreationDto(items));
-        model.addAttribute("idList", new ArrayList<Long>());
         return "editItemsForm";
     }
 
@@ -57,10 +53,12 @@ public class MultipleItemsController {
     }
 
     @PostMapping(value = "/saveEdition")
-    public String saveEdition(@ModelAttribute ItemsCreationDto form, @ModelAttribute ArrayList<Long> idList, Model model) {
+    public String saveEdition(@ModelAttribute ItemsCreationDto form, @RequestParam("deleteItems") Long[] deleteItems, Model model) {
         itemService.saveAll(form.getItems());
         model.addAttribute("items", itemService.findAll());
-        System.out.println(idList);
+        for (Long id : deleteItems) {
+            itemService.remove(id);
+        }
         return "redirect:/items/all";
     }
 
