@@ -1,4 +1,6 @@
-package jerry.sideproject.web.webapp.bean;
+package jerry.sideproject.web.webapp.controller.beans;
+
+import jerry.sideproject.web.webapp.bean.Item;
 
 import java.util.ArrayList;
 import java.util.List;

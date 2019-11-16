@@ -1,7 +1,9 @@
 package jerry.sideproject.web.webapp.services;
 
 import jerry.sideproject.web.webapp.bean.Item;
+import jerry.sideproject.web.webapp.services.interfaces.ItemService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ItemServiceImplement implements ItemService {
 
     /**

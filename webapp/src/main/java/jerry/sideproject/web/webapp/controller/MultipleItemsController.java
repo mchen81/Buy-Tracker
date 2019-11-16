@@ -1,8 +1,8 @@
 package jerry.sideproject.web.webapp.controller;
 
 import jerry.sideproject.web.webapp.bean.Item;
-import jerry.sideproject.web.webapp.bean.ItemsCreationDto;
-import jerry.sideproject.web.webapp.services.ItemService;
+import jerry.sideproject.web.webapp.controller.beans.ItemsCreationDto;
+import jerry.sideproject.web.webapp.services.interfaces.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

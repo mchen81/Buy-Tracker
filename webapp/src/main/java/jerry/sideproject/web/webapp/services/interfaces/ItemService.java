@@ -1,4 +1,4 @@
-package jerry.sideproject.web.webapp.services;
+package jerry.sideproject.web.webapp.services.interfaces;
 
 import jerry.sideproject.web.webapp.bean.Item;
 

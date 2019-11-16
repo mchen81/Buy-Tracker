@@ -8,6 +8,8 @@ public class Item {
 
     private Double price;
 
+    private String category;
+
     public long getId() {
         return id;
     }
@@ -34,6 +36,23 @@ public class Item {
         } catch (Exception e) {
             this.price = 0D;
         }
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Item() {
+    }
+
+    public Item(long id, String name, Double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
     }
 
     public void setPrice(Double price) {
@@ -80,6 +99,6 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Book [id=" + id + ", name=" + name + ", price=" + price + "]";
+        return "[id=" + id + ", name=" + name + ", price=" + price + "]";
     }
 }
