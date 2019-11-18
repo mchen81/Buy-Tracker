@@ -1,6 +1,7 @@
 package jerry.sideproject.web.webapp.dao;
 
-import jerry.sideproject.web.webapp.bean.Item;
+import jerry.sideproject.web.webapp.dao.beans.BuyingListDo;
+import jerry.sideproject.web.webapp.dao.beans.ItemDo;
 import jerry.sideproject.web.webapp.dao.interfaces.ItemDao;
 
 import javax.sql.DataSource;
@@ -15,69 +16,93 @@ public class ItemDaoImpl implements ItemDao {
 
     private DataSource dataSource;
 
+    private static final String SQL_GET_BUYING_LISTS = "{CALL GET_BUY_LISTS(?)}";
+
+    private static final String SQL_INSERT_INS_BUY_LIST = "{CALL INS_BUY_LIST(?,?,?)}";
+
     private static final String SQL_QUERY_GET_ITEMS = "{Call GET_ITEMS(?)}";
 
-    private static final String SQL_QUERY_INS_ITEMS = "{Call INS_ITEMS(?,?,?,?)}"; // listId, name , price , category
-
-    private static final String SQL_QUERY_REP_ITEMS = "{Call REPLACE_ITEMS(?,?,?,?)}";
+    private static final String SQL_INSERT_INS_REP_ITEMS = "{Call INS_ITEMS(?,?,?,?)}"; // listId, name , price , category
 
     @Override
-    public List<Item> getItems(long buyingListId) throws SQLException {
-
-        Connection con = null;
-        con = dataSource.getConnection();
-        List<Item> items = new ArrayList<>();
+    public List<ItemDo> getItemList(long buyingListId) throws SQLException {
+        Connection con = dataSource.getConnection();
+        List<ItemDo> itemDos = new ArrayList<>();
         CallableStatement callableStatement = con.prepareCall((SQL_QUERY_GET_ITEMS));
         callableStatement.setLong("i_BUYING_LIST_ID", buyingListId);
-        ResultSet resultSet = callableStatement.executeQuery();
-        con.close();
-        while (resultSet.next()) {
-            Item item = new Item();
-            item.setId(resultSet.getLong("ID"));
-            item.setName(resultSet.getString("ITEM_NAME"));
-            item.setPrice(resultSet.getDouble("ITEM_PRICE"));
-            item.setCategory(resultSet.getString("CATEGORY"));
-            items.add(item);
+        try {
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                ItemDo itemDo = new ItemDo();
+                itemDo.setId(resultSet.getLong("ID"));
+                itemDo.setName(resultSet.getString("NAME"));
+                itemDo.setPrice(resultSet.getDouble("PRICE"));
+                itemDo.setCategoryId(resultSet.getLong("CATEGORY_ID"));
+                itemDos.add(itemDo);
+            }
+            return itemDos;
+        } finally {
+            con.close();
         }
-        return items;
     }
 
     @Override
-    public int insertItems(long buyingListId, List<Item> items) throws SQLException {
-
-        Connection con = null;
-        con = dataSource.getConnection();
-        CallableStatement callableStatement = con.prepareCall((SQL_QUERY_INS_ITEMS));
-        for (Item item : items) {
-            callableStatement.setLong("i_BUYING_LIST_ID", buyingListId);
-            callableStatement.setString("i_ITEM_NAME", item.getName());
-            callableStatement.setDouble("i_ITEM_PRICE", item.getPrice());
-            callableStatement.setString("i_CATEGORY", item.getCategory());
-            callableStatement.addBatch();
+    public long insertBuyingList(BuyingListDo buyingListDo) throws SQLException {
+        Connection con = dataSource.getConnection();
+        CallableStatement callableStatement = con.prepareCall((SQL_INSERT_INS_BUY_LIST));
+        callableStatement.setLong("i_USER_ID", buyingListDo.getUserId());
+        callableStatement.setTime("i_TIME", buyingListDo.getTime());
+        callableStatement.setString("i_LOCATION", buyingListDo.getLocation());
+        try {
+            ResultSet resultSet = callableStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            } else {
+                return 0;
+            }
+        } finally {
+            con.close();
         }
-        callableStatement.executeBatch();
-        con.close();
-
-        return 0;
     }
 
     @Override
-    public int replaceItems(long buyingListId, List<Item> items) throws SQLException {
-
-        Connection con = null;
-        con = dataSource.getConnection();
-        CallableStatement callableStatement = con.prepareCall((SQL_QUERY_REP_ITEMS));
-        for (Item item : items) {
-            callableStatement.setLong("i_BUYING_LIST_ID", buyingListId);
-            callableStatement.setString("i_ITEM_NAME", item.getName());
-            callableStatement.setDouble("i_ITEM_PRICE", item.getPrice());
-            callableStatement.setString("i_CATEGORY", item.getCategory());
-            callableStatement.addBatch();
+    public List<BuyingListDo> getBuyingList(long userId) throws SQLException {
+        Connection con = dataSource.getConnection();
+        List<BuyingListDo> result = new ArrayList<>();
+        CallableStatement callableStatement = con.prepareCall((SQL_GET_BUYING_LISTS));
+        callableStatement.setLong("i_USER_ID", userId);
+        try {
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                BuyingListDo buyingListDo = new BuyingListDo();
+                buyingListDo.setId(resultSet.getLong("ID"));
+                buyingListDo.setUserId(userId);
+                buyingListDo.setLocation(resultSet.getString("LOCATION"));
+                buyingListDo.setTime(resultSet.getTime("TIME"));
+            }
+            return result;
+        } finally {
+            con.close();
         }
-        callableStatement.executeBatch();
-        con.close();
+    }
 
-        return 0;
+    @Override
+    public int insertOrReplaceItems(long buyingListId, List<ItemDo> itemDos) throws SQLException {
+        Connection con = dataSource.getConnection();
+        CallableStatement callableStatement = con.prepareCall((SQL_INSERT_INS_REP_ITEMS));
+        try {
+            for (ItemDo itemDo : itemDos) {
+                callableStatement.setLong("i_BUYING_LIST_ID", buyingListId);
+                callableStatement.setString("i_ITEM_NAME", itemDo.getName());
+                callableStatement.setDouble("i_ITEM_PRICE", itemDo.getPrice());
+                callableStatement.setLong("i_CATEGORY_ID", itemDo.getCategoryId());
+                callableStatement.addBatch();
+            }
+            callableStatement.executeBatch();
+            return 0;
+        } finally {
+            con.close();
+        }
     }
 
     public void setDataSource(DataSource dataSource) {

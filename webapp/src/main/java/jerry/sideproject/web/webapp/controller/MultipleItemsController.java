@@ -1,6 +1,6 @@
 package jerry.sideproject.web.webapp.controller;
 
-import jerry.sideproject.web.webapp.bean.Item;
+import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 import jerry.sideproject.web.webapp.controller.beans.ItemsCreationDto;
 import jerry.sideproject.web.webapp.services.interfaces.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class MultipleItemsController {
     public String showCreateForm(Model model) {
         ItemsCreationDto itemForm = new ItemsCreationDto();
         for (int i = 1; i <= 3; i++) {
-            itemForm.addItem(new Item());
+            itemForm.addItem(new ItemDto());
         }
         model.addAttribute("form", itemForm);
         return "createItemsForm";
@@ -37,24 +37,24 @@ public class MultipleItemsController {
 
     @GetMapping(value = "/edit")
     public String showEditForm(Model model) {
-        List<Item> items = new ArrayList<>();
+        List<ItemDto> itemDtos = new ArrayList<>();
         itemService.findAll()
                 .iterator()
-                .forEachRemaining(items::add);
-        model.addAttribute("form", new ItemsCreationDto(items));
+                .forEachRemaining(itemDtos::add);
+        model.addAttribute("form", new ItemsCreationDto(itemDtos));
         return "editItemsForm";
     }
 
     @PostMapping(value = "/save")
     public String saveItems(@ModelAttribute ItemsCreationDto form, Model model) {
-        itemService.saveAll(form.getItems());
+        itemService.saveAll(form.getItemDtos());
         model.addAttribute("items", itemService.findAll());
         return "redirect:/items/all";
     }
 
     @PostMapping(value = "/saveEdition")
     public String saveEdition(@ModelAttribute ItemsCreationDto form, @RequestParam("deleteItems") Long[] deleteItems, Model model) {
-        itemService.saveAll(form.getItems());
+        itemService.saveAll(form.getItemDtos());
         model.addAttribute("items", itemService.findAll());
         for (Long id : deleteItems) {
             itemService.remove(id);

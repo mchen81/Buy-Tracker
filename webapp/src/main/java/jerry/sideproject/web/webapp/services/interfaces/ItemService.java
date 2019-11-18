@@ -1,6 +1,6 @@
 package jerry.sideproject.web.webapp.services.interfaces;
 
-import jerry.sideproject.web.webapp.bean.Item;
+import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 
 import java.util.List;
 
@@ -12,14 +12,14 @@ public interface ItemService {
     /**
      * @return current item list
      */
-    List<Item> findAll();
+    List<ItemDto> findAll();
 
     /**
      * give a list of items, store it in a map
      *
-     * @param items a list of Item
+     * @param itemDtos a list of Item
      */
-    void saveAll(List<Item> items);
+    void saveAll(List<ItemDto> itemDtos);
 
     /**
      * @return total spending of current items

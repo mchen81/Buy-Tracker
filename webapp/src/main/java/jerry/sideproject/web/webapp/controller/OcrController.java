@@ -1,6 +1,6 @@
 package jerry.sideproject.web.webapp.controller;
 
-import jerry.sideproject.web.webapp.bean.Item;
+import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 import jerry.sideproject.web.webapp.services.interfaces.ItemService;
 import jerry.sideproject.web.webapp.services.ocr.OcrServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class OcrController {
      * @param filePath Path
      * @return a item list
      */
-    private List<Item> parseImage(Path filePath) {
+    private List<ItemDto> parseImage(Path filePath) {
         return ocrServices.imageRecognize(filePath);
     }
 

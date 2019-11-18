@@ -1,6 +1,6 @@
 package jerry.sideproject.web.webapp.services.ocr;
 
-import jerry.sideproject.web.webapp.bean.Item;
+import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,8 @@ public class OcrServices {
      *
      * @param imagePath a image path
      */
-    public List<Item> imageRecognize(Path imagePath) {
-        List<Item> result = new ArrayList<>();
+    public List<ItemDto> imageRecognize(Path imagePath) {
+        List<ItemDto> result = new ArrayList<>();
         Tesseract tesseract = new Tesseract();
         String text = "";
         try {
@@ -39,10 +39,10 @@ public class OcrServices {
         String[] lines = text.split("\n");
         long count = 1;
         for (String line : lines) {
-            Item item = splitString(line);
-            if (!item.isEmpty()) {
-                item.setId(count);
-                result.add(item);
+            ItemDto itemDto = splitString(line);
+            if (!itemDto.isEmpty()) {
+                itemDto.setId(count);
+                result.add(itemDto);
             }
             count++;
         }
@@ -55,20 +55,20 @@ public class OcrServices {
      * @param line one line on receipt
      * @return an Item
      */
-    private Item splitString(String line) {
-        Item item = new Item();
+    private ItemDto splitString(String line) {
+        ItemDto itemDto = new ItemDto();
         String[] words = line.split(" "); // to get the last element(price)
         try {
-            item.setPrice(words[words.length - 1]);
+            itemDto.setPrice(words[words.length - 1]);
         } catch (NumberFormatException e) {
-            item.setPrice("0");
+            itemDto.setPrice("0");
         }
         String itemName = "";
         for (int i = 0; i < words.length - 2; i++) {
             String word = words[i];
             itemName += (word + " "); // except for the last, put to items
         }
-        item.setName(itemName.trim());
-        return item;
+        itemDto.setName(itemName.trim());
+        return itemDto;
     }
 }

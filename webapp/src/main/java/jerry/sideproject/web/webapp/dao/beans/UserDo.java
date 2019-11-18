@@ -1,12 +1,12 @@
-package jerry.sideproject.web.webapp.bean;
+package jerry.sideproject.web.webapp.dao.beans;
 
-public class UserInfo {
-
+public class UserDo {
 
     private long userId;
-    private String userName;
-    private String key;
 
+    private String userName;
+
+    private String key;
 
     public long getUserId() {
         return userId;

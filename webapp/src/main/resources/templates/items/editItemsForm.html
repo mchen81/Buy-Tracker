@@ -12,9 +12,9 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <a class="btn btn-info" href="#" th:href="@{/items/all}"> Back to All Items </a>
+            <a class="btn btn-info" href="#" th:href="@{/itemDtos/all}"> Back to All Items </a>
             <form action="#" class="form-horizontal"
-                  th:action="@{/items/saveEdition}"
+                  th:action="@{/itemDtos/saveEdition}"
                   th:object="${form}"
                   method="post">
                 <fieldset>
@@ -31,16 +31,16 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="item, itemStat : ${form.items}">
-                            <td><input hidden th:name="|items[${itemStat.index}].id|" th:value="${item.getId()}"/></td>
+                        <tr th:each="itemDto, itemStat : ${form.itemDtos}">
+                            <td><input hidden th:name="|itemDtos[${itemStat.index}].id|" th:value="${itemDto.getId()}"/></td>
                             <td><input th:placeholder="Name + ' ' + ${itemStat.count}"
-                                       th:name="|items[${itemStat.index}].name|" th:value="${item.getName()}"
+                                       th:name="|itemDtos[${itemStat.index}].name|" th:value="${itemDto.getName()}"
                                        /></td>
                             <td><input th:placeholder="Price + ' ' + ${itemStat.count}"
-                                       th:name="|items[${itemStat.index}].price|"
-                                       th:value="${item.getPrice()}" /></td>
+                                       th:name="|itemDtos[${itemStat.index}].price|"
+                                       th:value="${itemDto.getPrice()}" /></td>
 
-                            <td><input type="checkbox" name="deleteItems" th:text=" REMOVE" th:value=${item.getId()} /></td>
+                            <td><input type="checkbox" name="deleteItems" th:text=" REMOVE" th:value=${itemDto.getId()} /></td>
 
                         </tr>
                         </tbody>

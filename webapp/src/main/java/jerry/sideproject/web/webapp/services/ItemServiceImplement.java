@@ -1,6 +1,6 @@
 package jerry.sideproject.web.webapp.services;
 
-import jerry.sideproject.web.webapp.bean.Item;
+import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 import jerry.sideproject.web.webapp.services.interfaces.ItemService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,23 +19,23 @@ public class ItemServiceImplement implements ItemService {
     /**
      * storing current items with incremented id
      */
-    static Map<Long, Item> itemsDB = new HashMap<>();
+    static Map<Long, ItemDto> itemsDB = new HashMap<>();
 
     @Override
-    public List<Item> findAll() {
+    public List<ItemDto> findAll() {
         return new ArrayList<>(itemsDB.values());
     }
 
     @Override
-    public void saveAll(List<Item> items) {
+    public void saveAll(List<ItemDto> itemDtos) {
         long nextId = getNextId();
-        items.removeIf(i -> i.isEmpty()); // remove the item if it's empty
-        for (Item item : items) {
-            if (item.getId() == 0) {
-                item.setId(nextId++);
+        itemDtos.removeIf(i -> i.isEmpty()); // remove the item if it's empty
+        for (ItemDto itemDto : itemDtos) {
+            if (itemDto.getId() == 0) {
+                itemDto.setId(nextId++);
             }
         }
-        Map<Long, Item> itemsMap = items.stream().collect(Collectors.toMap(Item::getId, Function.identity()));
+        Map<Long, ItemDto> itemsMap = itemDtos.stream().collect(Collectors.toMap(ItemDto::getId, Function.identity()));
         itemsDB.putAll(itemsMap);
     }
 
@@ -45,8 +45,8 @@ public class ItemServiceImplement implements ItemService {
             return 0D;
         }
         Double total = 0D;
-        for (Item item : findAll()) {
-            total += item.getPrice();
+        for (ItemDto itemDto : findAll()) {
+            total += itemDto.getPrice();
         }
         return total;
     }

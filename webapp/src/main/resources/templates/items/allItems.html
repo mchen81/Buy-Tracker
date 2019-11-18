@@ -21,12 +21,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${items.empty}">
+                <tr th:if="${itemDtos.empty}">
                     <td colspan="2"> No Items</td>
                 </tr>
-                <tr th:each="item : ${items}">
-                    <td><span th:text="${item.name}"> Item </span></td>
-                    <td><span th:text="${item.price}"> Price </span></td>
+                <tr th:each="itemDto : ${itemDtos}">
+                    <td><span th:text="${itemDto.name}"> Item </span></td>
+                    <td><span th:text="${itemDto.price}"> Price </span></td>
                 </tr>
 
                 <tr>
@@ -39,12 +39,12 @@
             </table>
         </div>
         <div class="col-md-6">
-            <a class="btn btn-success" href="#" th:href="@{/items/create}"> Add Items </a>
-            <a class="btn btn-primary" href="#" th:href="@{/items/edit}"
-               th:classappend="${items.empty} ? 'disabled' : ''"> Edit Items </a>
-            <a class="btn btn-primary" href="#" th:href="@{/items/submitToDB}"
-               th:classappend="${items.empty} ? 'disabled' : ''"> Submit </a>
-            <a class="btn btn-success" href="#" th:href="@{/items/clear}"> Clear </a>
+            <a class="btn btn-success" href="#" th:href="@{/itemDtos/create}"> Add Items </a>
+            <a class="btn btn-primary" href="#" th:href="@{/itemDtos/edit}"
+               th:classappend="${itemDtos.empty} ? 'disabled' : ''"> Edit Items </a>
+            <a class="btn btn-primary" href="#" th:href="@{/itemDtos/submitToDB}"
+               th:classappend="${itemDtos.empty} ? 'disabled' : ''"> Submit </a>
+            <a class="btn btn-success" href="#" th:href="@{/itemDtos/clear}"> Clear </a>
 
         </div>
     </div>

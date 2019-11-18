@@ -1,31 +1,29 @@
 package jerry.sideproject.web.webapp.controller.beans;
 
-import jerry.sideproject.web.webapp.bean.Item;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemsCreationDto {
 
-    private List<Item> items;
+    private List<ItemDto> itemDtos;
 
     public ItemsCreationDto() {
-        this.items = new ArrayList<>();
+        this.itemDtos = new ArrayList<>();
     }
 
-    public ItemsCreationDto(List<Item> items) {
-        this.items = items;
+    public ItemsCreationDto(List<ItemDto> itemDtos) {
+        this.itemDtos = itemDtos;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<ItemDto> getItemDtos() {
+        return itemDtos;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setItemDtos(List<ItemDto> itemDtos) {
+        this.itemDtos = itemDtos;
     }
 
-    public void addItem(Item item) {
-        this.items.add(item);
+    public void addItem(ItemDto itemDto) {
+        this.itemDtos.add(itemDto);
     }
 }

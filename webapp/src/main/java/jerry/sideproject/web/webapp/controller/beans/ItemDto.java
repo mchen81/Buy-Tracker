@@ -1,6 +1,6 @@
-package jerry.sideproject.web.webapp.bean;
+package jerry.sideproject.web.webapp.controller.beans;
 
-public class Item {
+public class ItemDto {
 
     private long id;
 
@@ -46,10 +46,10 @@ public class Item {
         this.category = category;
     }
 
-    public Item() {
+    public ItemDto() {
     }
 
-    public Item(long id, String name, Double price) {
+    public ItemDto(long id, String name, Double price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -77,7 +77,7 @@ public class Item {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Item other = (Item) obj;
+        ItemDto other = (ItemDto) obj;
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -100,5 +100,38 @@ public class Item {
     @Override
     public String toString() {
         return "[id=" + id + ", name=" + name + ", price=" + price + "]";
+    }
+
+    public static class UserDto {
+
+
+        private long userId;
+        private String userName;
+        private String key;
+
+
+        public long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(long userId) {
+            this.userId = userId;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
     }
 }
