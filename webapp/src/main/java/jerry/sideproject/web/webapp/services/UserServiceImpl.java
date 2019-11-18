@@ -8,12 +8,16 @@ import jerry.sideproject.web.webapp.services.exceptions.UserHasExistException;
 import jerry.sideproject.web.webapp.services.exceptions.WrongPasswordException;
 import jerry.sideproject.web.webapp.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired

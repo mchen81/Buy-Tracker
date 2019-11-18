@@ -3,6 +3,7 @@ package jerry.sideproject.web.webapp.dao;
 import jerry.sideproject.web.webapp.dao.beans.BuyingListDo;
 import jerry.sideproject.web.webapp.dao.beans.ItemDo;
 import jerry.sideproject.web.webapp.dao.interfaces.ItemDao;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.CallableStatement;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ItemDaoImpl implements ItemDao {
 
     private DataSource dataSource;

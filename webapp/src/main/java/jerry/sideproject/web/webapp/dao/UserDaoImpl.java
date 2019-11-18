@@ -2,6 +2,7 @@ package jerry.sideproject.web.webapp.dao;
 
 import jerry.sideproject.web.webapp.dao.beans.UserDo;
 import jerry.sideproject.web.webapp.dao.interfaces.UserDao;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.CallableStatement;
@@ -9,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Repository
 public class UserDaoImpl implements UserDao {
 
     private DataSource dataSource;
