@@ -12,9 +12,9 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<a class="btn btn-info" href="#" th:href="@{/itemDtos/all}"> Back to All Items </a>
+			<a class="btn btn-info" href="#" th:href="@{/items/all}"> Back to All Items </a>
 			<form action="#" class="form-horizontal"
-				  th:action="@{/itemDtos/save}"
+				  th:action="@{/items/save}"
 				  th:object="${form}"
 				  method="post">
 				<fieldset>
@@ -30,9 +30,9 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr th:each="itemDto, itemStat : *{itemDtos}">
-							<td><input th:placeholder="Name + ' ' + ${itemStat.count}" th:field="*{itemDtos[__${itemStat.index}__].name}" /></td>
-							<td><input th:placeholder="Price + ' ' + ${itemStat.count}" th:field="*{itemDtos[__${itemStat.index}__].price}" /></td>
+						<tr th:each="item, itemStat : *{items}">
+							<td><input th:placeholder="Name + ' ' + ${itemStat.count}" th:field="*{items[__${itemStat.index}__].name}" /></td>
+							<td><input th:placeholder="Price + ' ' + ${itemStat.count}" th:field="*{items[__${itemStat.index}__].price}" /></td>
 						</tr>
 						</tbody>
 					</table>
