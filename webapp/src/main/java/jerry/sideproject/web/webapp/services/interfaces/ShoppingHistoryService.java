@@ -6,11 +6,15 @@ import java.util.List;
 
 public interface ShoppingHistoryService {
 
-    void initialize();
-
     List<ItemDtoList> findAll();
 
-    void addList(ItemDtoList itemDtoList);
+    void addToHistory(ItemDtoList itemDtoList);
 
+    ItemDtoList getItemDtoListById(Long listId);
 
+    void removeItemDtoList(Long listId);
+
+    void editItemDtoList(Long listId, ItemDtoList editedItemDtoList);
+
+    boolean isEmpty();
 }

@@ -20,9 +20,13 @@
     <a class="btn btn-info" href="#" th:href="@{/items/uploadForm}"> Upload Image </a>
 </div>
 
-<p th:each="list : ${history}">
-    <a th:text=${list.listId}> <br/> </a>
-</p>
+<div class="container">
+    <p th:each="list : ${history}">
+        <a href="#"
+           th:text="${list.createDate} + ' at ' +  ${list.location}"
+           th:href="@{/items/recall(listId=${list.listId})}"></a>
+    </p>
+</div>
 
 
 </body>

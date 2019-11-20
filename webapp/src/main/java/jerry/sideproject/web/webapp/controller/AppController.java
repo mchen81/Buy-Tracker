@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
 public class AppController {
 
     @Autowired
     private ShoppingHistoryService shoppingHistoryService;
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String showIndex(Model model) {
-        shoppingHistoryService.initialize();
         model.addAttribute("history", shoppingHistoryService.findAll());
         return "index";
     }

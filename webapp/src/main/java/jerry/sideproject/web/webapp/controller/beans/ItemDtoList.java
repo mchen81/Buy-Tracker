@@ -7,7 +7,7 @@ public class ItemDtoList {
 
     private List<ItemDto> items;
 
-    private long listId;
+    private Long listId;
 
     private String location;
 
@@ -34,11 +34,11 @@ public class ItemDtoList {
         this.items.add(itemDto);
     }
 
-    public long getListId() {
+    public Long getListId() {
         return listId;
     }
 
-    public void setListId(long listId) {
+    public void setListId(Long listId) {
         this.listId = listId;
     }
 
@@ -56,5 +56,19 @@ public class ItemDtoList {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("List Id: ");
+        stringBuilder.append(listId);
+        stringBuilder.append("\n");
+
+        for (ItemDto itemDto : items) {
+            stringBuilder.append("Item name: ");
+            stringBuilder.append(itemDto.getName());
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 }
