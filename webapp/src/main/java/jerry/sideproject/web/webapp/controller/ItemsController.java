@@ -14,7 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/items")
-public class MultipleItemsController {
+public class ItemsController {
 
     @Autowired
     private ItemService itemService;

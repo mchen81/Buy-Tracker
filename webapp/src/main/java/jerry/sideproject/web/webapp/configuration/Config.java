@@ -14,12 +14,12 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 @Configuration
 public class Config implements WebMvcConfigurer {
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/")
-            .setViewName("index");
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-    }
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/")
+//            .setViewName("index");
+//        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//    }
 
     @Bean
     public ITemplateResolver templateResolver() {

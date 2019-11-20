@@ -19,5 +19,11 @@
     <a class="btn btn-info" href="#" th:href="@{/items/all}"> Create a list </a> <br/> <br/>
     <a class="btn btn-info" href="#" th:href="@{/items/uploadForm}"> Upload Image </a>
 </div>
+
+<p th:each="list : ${history}">
+    <a th:text=${list.listId}> <br/> </a>
+</p>
+
+
 </body>
 </html>

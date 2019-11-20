@@ -7,6 +7,13 @@ public class ItemDtoList {
 
     private List<ItemDto> items;
 
+    private long listId;
+
+    private String location;
+
+    private String createDate;
+
+
     public ItemDtoList() {
         this.items = new ArrayList<>();
     }
@@ -25,5 +32,29 @@ public class ItemDtoList {
 
     public void addItem(ItemDto itemDto) {
         this.items.add(itemDto);
+    }
+
+    public long getListId() {
+        return listId;
+    }
+
+    public void setListId(long listId) {
+        this.listId = listId;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }
