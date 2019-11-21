@@ -49,7 +49,6 @@ public class ItemsController {
 
     @GetMapping(value = "/create/{listId}")
     public String showCreateForm(Model model, @PathVariable("listId") String listId) {
-        System.out.println("In Create Form, list Id is " + listId);
         ItemDtoList itemForm = new ItemDtoList();
         for (int i = 1; i <= 3; i++) {
             itemForm.addItem(new ItemDto());
@@ -61,7 +60,6 @@ public class ItemsController {
 
     @GetMapping(value = "/edit/{listId}")
     public String showEditForm(Model model, @PathVariable("listId") String listId) {
-        System.out.println("In Edit Form, list Id is " + listId);
         List<ItemDto> itemDtos = new ArrayList<>();
         itemService.findAll()
                 .iterator()
@@ -74,9 +72,7 @@ public class ItemsController {
 
     @PostMapping(value = "/save")
     public String saveItems(@ModelAttribute ItemDtoList form, @RequestParam String listId, Model model) {
-        System.out.println("In saving form, list id is " + listId);
         itemService.saveAll(form.getItems());
-        System.out.println("Before saving process, listId is " + listId);
         Long listIdNumber = Long.valueOf(listId);
         if (listIdNumber.equals(0L)) {
             form.setCreateDate(LocalDateTime.now().toLocalDate().toString());
@@ -90,7 +86,6 @@ public class ItemsController {
         }
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("listId", listId);
-        System.out.println("After saving process, listId is " + form.getListId());
         return "redirect:/items/all/" + listIdNumber.toString();
     }
 

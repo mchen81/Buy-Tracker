@@ -1,7 +1,9 @@
 package jerry.sideproject.web.webapp.controller;
 
 import jerry.sideproject.web.webapp.controller.beans.ItemDto;
+import jerry.sideproject.web.webapp.controller.beans.ItemDtoList;
 import jerry.sideproject.web.webapp.services.interfaces.ItemService;
+import jerry.sideproject.web.webapp.services.interfaces.ShoppingHistoryService;
 import jerry.sideproject.web.webapp.services.ocr.OcrServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -28,6 +31,9 @@ public class OcrController {
     private OcrServices ocrServices;
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private ShoppingHistoryService shoppingHistoryService;
 
     @GetMapping("/uploadForm")
     public String index() {
@@ -49,7 +55,12 @@ public class OcrController {
             itemService.saveAll(parseImage(path));
             model.addAttribute("items", itemService.findAll());
             model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
-            return "allItems";
+            ItemDtoList newForm = new ItemDtoList();
+            newForm.setItems(itemService.findAll());
+            newForm.setCreateDate(LocalDateTime.now().toLocalDate().toString());
+            newForm.setLocation("San Francisco");
+            Long newFormId = shoppingHistoryService.addToHistory(newForm);
+            return "redirect:/items/all/" + newFormId;
         } catch (IOException e) {
             e.printStackTrace();
             return "error";
@@ -58,6 +69,7 @@ public class OcrController {
 
     /**
      * parse image file by ocr process
+     *
      * @param filePath Path
      * @return a item list
      */
@@ -66,7 +78,6 @@ public class OcrController {
     }
 
     /**
-     *
      * @param file file name
      * @return true if file is png or jpg
      */
