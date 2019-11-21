@@ -13,7 +13,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <a class="btn btn-info" href="#" th:href="@{/items/all}"> Back to All Items </a>
+            <a class="btn btn-info" href="#" th:href="@{/items/all/{listId}(listId=${listId})}"> Back to All Items </a>
             <form action="#" class="form-horizontal"
                   th:action="@{/items/saveEdition}"
                   th:object="${form}"

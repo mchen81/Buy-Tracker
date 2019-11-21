@@ -19,8 +19,9 @@
     <a class="btn btn-info" href="#" th:href="@{/items/all/0}"> Create a list </a> <br/> <br/>
     <a class="btn btn-info" href="#" th:href="@{/items/uploadForm}"> Upload Image </a>
 </div>
-
+<br/>
 <div class="container">
+    <h2 th:unless="${history.empty}"> HISTORY </h2>
     <p th:each="list : ${history}">
         <a href="#"
            th:text="${list.createDate} + ' at ' +  ${list.location}"

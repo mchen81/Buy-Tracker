@@ -15,7 +15,6 @@ public class AppController {
     @GetMapping("/index")
     public String showIndex(Model model) {
         model.addAttribute("history", shoppingHistoryService.findAll());
-        model.addAttribute("listId", "");
         return "index";
     }
 }
