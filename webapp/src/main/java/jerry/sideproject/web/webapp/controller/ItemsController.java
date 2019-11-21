@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,10 @@ public class ItemsController {
     public String showNewForm(Model model, @PathVariable("listId") Long listId) {
         if (listId.equals(0L)) {
             itemService.clear();
+        } else {
+            ItemDtoList itemDtoList = shoppingHistoryService.getItemDtoListById(listId);
+            model.addAttribute("buyingDate", itemDtoList.getCreateDate());
+            model.addAttribute("location", itemDtoList.getLocation());
         }
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
@@ -75,7 +80,7 @@ public class ItemsController {
         itemService.saveAll(form.getItems());
         Long listIdNumber = Long.valueOf(listId);
         if (listIdNumber.equals(0L)) {
-            form.setCreateDate(LocalDateTime.now().toLocalDate().toString());
+            form.setCreateDate(getCurrentDate() );
             form.setLocation("San Francisco");
             listIdNumber = shoppingHistoryService.addToHistory(form);
         } else {
@@ -108,7 +113,11 @@ public class ItemsController {
     }
 
     @GetMapping(value = "/submitToDB")
-    public String submit(Model model) {
+    public String submit(Model model, @RequestParam("buyingDate") String buyingDate, @RequestParam String location, @RequestParam Long listId) {
+        ItemDtoList itemDtoList = shoppingHistoryService.getItemDtoListById(listId);
+        itemDtoList.setCreateDate(buyingDate);
+        itemDtoList.setLocation(location);
+        shoppingHistoryService.editItemDtoList(listId, itemDtoList);
         model.addAttribute("history", shoppingHistoryService.findAll());
         return "redirect:/index";
     }
@@ -119,5 +128,12 @@ public class ItemsController {
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
         return "redirect:/items/all/0";
+    }
+
+    private String getCurrentDate() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String formatDateTime = now.format(formatter);
+        return formatDateTime;
     }
 }

@@ -2,6 +2,16 @@
 <head>
     <title>All Items</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+        });
+    </script>
 </head>
 <body>
 <div class="container">
@@ -36,21 +46,26 @@
                     <th th:text="${total}"/>
                 </tr>
 
-
                 </tbody>
             </table>
-        </div>
 
+            <form action="#" th:action="@{/items/submitToDB}" method="get">
+                <input type="hidden" id="listId" name="listId" th:value="${listId}">
+                <p>Date: <input type="text" id="datepicker" name="buyingDate" th:value="${buyingDate}"></p>
+                <p>Location: <input type="text" name="location" th:value="${location}"></p>
+                <input type="submit" class="btn btn-primary" th:classappend="${items.empty} ? 'disabled' : ''" value="Submit">
+            </form>
+
+        </div>
 
         <div class="col-md-6">
             <a class="btn btn-success" href="#" th:href="@{/items/create/{listId}(listId=${listId})}"> Add Items </a>
             <a class="btn btn-primary" href="#" th:href="@{/items/edit/{listId}(listId=${listId})}"
                th:classappend="${items.empty} ? 'disabled' : ''"> Edit Items </a>
-            <a class="btn btn-primary" href="#" th:href="@{/items/submitToDB}"
-               th:classappend="${items.empty} ? 'disabled' : ''"> Submit </a>
             <a class="btn btn-success" href="#" th:href="@{/items/clear}"> Clear </a>
-
         </div>
+
+
     </div>
 
 
