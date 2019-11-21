@@ -20,11 +20,11 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
     }
 
     @Override
-    public void addToHistory(ItemDtoList itemDtoList) {
+    public Long addToHistory(ItemDtoList itemDtoList) {
         Long listId = getNextId();
         itemDtoList.setListId(listId);
         shoppingHistory.put(listId, itemDtoList);
-
+        return listId;
     }
 
     @Override
@@ -39,14 +39,18 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
 
     @Override
     public void editItemDtoList(Long listId, ItemDtoList editedItemDtoList) {
-        ItemDtoList itemDtoList = getItemDtoListById(listId);
-        if (editedItemDtoList.getLocation() == null) {
-            editedItemDtoList.setLocation(itemDtoList.getLocation());
+        if (shoppingHistory.containsKey(listId)) {
+            ItemDtoList itemDtoList = getItemDtoListById(listId);
+            if (editedItemDtoList.getLocation() == null) {
+                editedItemDtoList.setLocation(itemDtoList.getLocation());
+            }
+            if (editedItemDtoList.getCreateDate() == null) {
+                editedItemDtoList.setCreateDate(itemDtoList.getCreateDate());
+            }
+            shoppingHistory.put(listId, editedItemDtoList);
+        } else {
+            throw new IllegalArgumentException("list Id does not be contained in shopping history: " + listId);
         }
-        if (editedItemDtoList.getCreateDate() == null) {
-            editedItemDtoList.setCreateDate(itemDtoList.getCreateDate());
-        }
-        shoppingHistory.put(listId, editedItemDtoList);
     }
 
     @Override
@@ -54,12 +58,10 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
         return shoppingHistory.size() == 0;
     }
 
-
     /**
      * @return current max id + 1
      */
     private Long getNextId() {
         return (long) (shoppingHistory.size() + 1);
     }
-
 }

@@ -24,12 +24,14 @@ public class ItemsController {
     @Autowired
     private ShoppingHistoryService shoppingHistoryService;
 
-    @GetMapping(value = "/all")
-    public String showAll(Model model) {
+    @GetMapping(value = "/all/{listId}")
+    public String showNewForm(Model model, @PathVariable("listId") Long listId) {
+        if (listId.equals(0L)) {
+            itemService.clear();
+        }
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
-        model.addAttribute("history", shoppingHistoryService.findAll());
-
+        model.addAttribute("listId", listId);
         return "allItems";
     }
 
@@ -37,51 +39,66 @@ public class ItemsController {
     public String showOneHistory(Model model, @RequestParam Long listId) {
         itemService.clear();
         ItemDtoList itemDtoList = shoppingHistoryService.getItemDtoListById(listId);
-        model.addAttribute("listID", listId.toString());
+        model.addAttribute("form", itemDtoList);
         itemService.saveAll(itemDtoList.getItems());
-        return showAll(model);
+        model.addAttribute("items", itemService.findAll());
+        model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
+        model.addAttribute("history", shoppingHistoryService.findAll());
+        return "redirect:/items/all/" + listId.toString();
     }
 
-
-    @GetMapping(value = "/create")
-    public String showCreateForm(Model model, @ModelAttribute String listId) {
+    @GetMapping(value = "/create/{listId}")
+    public String showCreateForm(Model model, @PathVariable("listId") String listId) {
+        System.out.println("In Create Form, list Id is " + listId);
         ItemDtoList itemForm = new ItemDtoList();
         for (int i = 1; i <= 3; i++) {
             itemForm.addItem(new ItemDto());
         }
-        itemForm.setListId(listId == null || listId.isEmpty() ? null : Long.valueOf(listId));
+        itemForm.setListId(listId.equals("0") ? null : Long.valueOf(listId));
         model.addAttribute("form", itemForm);
         return "createItemsForm";
     }
 
-    @GetMapping(value = "/edit")
-    public String showEditForm(Model model, @ModelAttribute String listId) {
+    @GetMapping(value = "/edit/{listId}")
+    public String showEditForm(Model model, @PathVariable("listId") String listId) {
+        System.out.println("In Edit Form, list Id is " + listId);
         List<ItemDto> itemDtos = new ArrayList<>();
         itemService.findAll()
                 .iterator()
                 .forEachRemaining(itemDtos::add);
         ItemDtoList itemDtoList = new ItemDtoList(itemDtos);
-        itemDtoList.setListId(listId == null || listId.isEmpty() ? null : Long.valueOf(listId));
+        itemDtoList.setListId(Long.valueOf(listId));
         model.addAttribute("form", itemDtoList);
         return "editItemsForm";
     }
 
     @PostMapping(value = "/save")
-    public String saveItems(@ModelAttribute ItemDtoList form, Model model) {
+    public String saveItems(@ModelAttribute ItemDtoList form, @RequestParam String listId, Model model) {
+        System.out.println("In saving form, list id is " + listId);
         itemService.saveAll(form.getItems());
-        if (form.getListId() == null) {
+        System.out.println("Before saving process, listId is " + listId);
+        Long listIdNumber = Long.valueOf(listId);
+        if (listIdNumber.equals(0L)) {
             form.setCreateDate(LocalDateTime.now().toLocalDate().toString());
             form.setLocation("San Francisco");
-            shoppingHistoryService.addToHistory(form);
+            listIdNumber = shoppingHistoryService.addToHistory(form);
         } else {
-            shoppingHistoryService.editItemDtoList(form.getListId(), form);
+            ItemDtoList editedForm = new ItemDtoList();
+            editedForm.setItems(itemService.findAll());
+            editedForm.setListId(listIdNumber);
+            shoppingHistoryService.editItemDtoList(listIdNumber, editedForm);
         }
         model.addAttribute("items", itemService.findAll());
-        return "redirect:/items/all";
+        model.addAttribute("listId", listId);
+        System.out.println("After saving process, listId is " + form.getListId());
+        return "redirect:/items/all/" + listIdNumber.toString();
     }
 
     @PostMapping(value = "/saveEdition")
-    public String saveEdition(@ModelAttribute ItemDtoList form, @RequestParam("deleteItems") @Nullable Long[] deleteItems, Model model) {
+    public String saveEdition(@ModelAttribute ItemDtoList form,
+                              @RequestParam String listId,
+                              @RequestParam("deleteItems") @Nullable Long[] deleteItems,
+                              Model model) {
         itemService.saveAll(form.getItems());
         model.addAttribute("items", itemService.findAll());
         if (deleteItems != null) {
@@ -89,17 +106,16 @@ public class ItemsController {
                 itemService.remove(id);
             }
         }
-
         form.setItems(itemService.findAll());
-        shoppingHistoryService.editItemDtoList(form.getListId(), form);
-        return "redirect:/items/all";
+        shoppingHistoryService.editItemDtoList(Long.valueOf(listId), form);
+        model.addAttribute("listId", listId);
+        return "redirect:/items/all/" + listId;
     }
 
     @GetMapping(value = "/submitToDB")
     public String submit(Model model) {
         model.addAttribute("history", shoppingHistoryService.findAll());
         return "redirect:/index";
-
     }
 
     @GetMapping(value = "/clear")
@@ -107,6 +123,6 @@ public class ItemsController {
         itemService.clear();
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
-        return "redirect:/items/all";
+        return "redirect:/items/all/0";
     }
 }

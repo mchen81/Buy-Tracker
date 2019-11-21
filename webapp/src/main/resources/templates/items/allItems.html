@@ -9,6 +9,7 @@
         <div class="col-md-12">
             <h1> Items </h1>
             <h2 th:text="${message}"/>
+            <h2 th:text="'LIST ID: ' + ${listId}"/>
         </div>
     </div>
     <div class="row">
@@ -41,8 +42,8 @@
 
 
         <div class="col-md-6">
-            <a class="btn btn-success" href="#" th:href="@{/items/create}"> Add Items </a>
-            <a class="btn btn-primary" href="#" th:href="@{/items/edit}"
+            <a class="btn btn-success" href="#" th:href="@{/items/create/{listId}(listId=${listId})}"> Add Items </a>
+            <a class="btn btn-primary" href="#" th:href="@{/items/edit/{listId}(listId=${listId})}"
                th:classappend="${items.empty} ? 'disabled' : ''"> Edit Items </a>
             <a class="btn btn-primary" href="#" th:href="@{/items/submitToDB}"
                th:classappend="${items.empty} ? 'disabled' : ''"> Submit </a>

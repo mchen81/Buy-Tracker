@@ -8,7 +8,7 @@ public interface ShoppingHistoryService {
 
     List<ItemDtoList> findAll();
 
-    void addToHistory(ItemDtoList itemDtoList);
+    Long addToHistory(ItemDtoList itemDtoList);
 
     ItemDtoList getItemDtoListById(Long listId);
 
