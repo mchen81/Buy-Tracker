@@ -35,7 +35,22 @@ public class ItemsController {
         categoryMap.put("Drink", 2);
         categoryMap.put("Fruit", 3);
         categoryMap.put("Ticket", 4);
-        return new ArrayList<>(categoryMap.keySet());
+
+        categoryMap.put("NONE", 5);
+
+
+        List<String> anotherList = new ArrayList<>();
+        anotherList.add("NONE");
+        anotherList.add("FOOD");
+        anotherList.add("DRINK");
+        anotherList.add("TRANSPORTATION");
+        anotherList.add("Entertainment");
+        anotherList.add("OTHER");
+
+
+
+        return anotherList;
+        //return new ArrayList<>(categoryMap.keySet());
     }
 
     @GetMapping(value = "/all/{listId}")
@@ -126,7 +141,7 @@ public class ItemsController {
         return "redirect:/items/all/" + listId;
     }
 
-    @GetMapping(value = "/submitToDB")
+    @PostMapping(value = "/submitToDB")
     public String submit(Model model, @RequestParam("buyingDate") String buyingDate, @RequestParam String location, @RequestParam Long listId) {
         ItemDtoList itemDtoList = shoppingHistoryService.getItemDtoListById(listId);
         itemDtoList.setCreateDate(buyingDate);

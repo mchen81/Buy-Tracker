@@ -8,7 +8,7 @@ public class ItemDto {
 
     private Double price;
 
-    private String category;
+    private String category = "None";
 
     public long getId() {
         return id;
@@ -101,6 +101,4 @@ public class ItemDto {
     public String toString() {
         return "[id=" + id + ", name=" + name + ", price=" + price + "]";
     }
-
-
 }
