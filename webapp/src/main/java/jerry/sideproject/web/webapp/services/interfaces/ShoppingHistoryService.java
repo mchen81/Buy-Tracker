@@ -17,4 +17,6 @@ public interface ShoppingHistoryService {
     void editItemDtoList(Long listId, ItemDtoList editedItemDtoList);
 
     boolean isEmpty();
+
+    void updateData(Long listId);
 }

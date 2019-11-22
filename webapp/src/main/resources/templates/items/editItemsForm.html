@@ -42,8 +42,18 @@
                                        th:name="|items[${itemStat.index}].price|"
                                        th:value="${item.getPrice()}"/></td>
 
-                            <td><input type="checkbox" name="deleteItems" th:text=" REMOVE" th:value=${item.getId()}/>
+                            <td>
+                                <select th:field="*{items[__${itemStat.index}__].category}">
+                                    <option th:each="categoryItem: ${categoryList}" th:value="${categoryItem}"
+                                            th:text="${categoryItem}">
+                                    </option>
+                                </select>
                             </td>
+
+                            <td><input type="checkbox" name="deleteItems" th:text="REMOVE" th:value=${item.id}/>
+                            </td>
+
+
 
                         </tr>
                         </tbody>

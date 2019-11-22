@@ -1,7 +1,9 @@
 package jerry.sideproject.web.webapp.services;
 
 import jerry.sideproject.web.webapp.controller.beans.ItemDto;
+import jerry.sideproject.web.webapp.dao.interfaces.ItemDao;
 import jerry.sideproject.web.webapp.services.interfaces.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ public class ItemServiceImplement implements ItemService {
      * storing current items with incremented id
      */
     static Map<Long, ItemDto> itemsDB = new HashMap<>();
+
 
     @Override
     public List<ItemDto> findAll() {

@@ -1,9 +1,14 @@
 package jerry.sideproject.web.webapp.services;
 
 import jerry.sideproject.web.webapp.controller.beans.ItemDtoList;
+import jerry.sideproject.web.webapp.dao.interfaces.ItemDao;
 import jerry.sideproject.web.webapp.services.interfaces.ShoppingHistoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +19,9 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
 
     static Map<Long, ItemDtoList> shoppingHistory = new HashMap<>();
 
+    @Autowired
+    private ItemDao itemDao;
+
     @Override
     public List<ItemDtoList> findAll() {
         return new ArrayList<>(shoppingHistory.values());
@@ -23,6 +31,7 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
     public Long addToHistory(ItemDtoList itemDtoList) {
         Long listId = getNextId();
         itemDtoList.setListId(listId);
+        itemDtoList.setUpdated(true);
         shoppingHistory.put(listId, itemDtoList);
         return listId;
     }
@@ -56,6 +65,21 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
     @Override
     public boolean isEmpty() {
         return shoppingHistory.size() == 0;
+    }
+
+    @Override
+    public void updateData(Long listId) {
+
+        ItemDtoList itemDtoList = shoppingHistory.get(listId);
+        String createDate = itemDtoList.getCreateDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate localDate = LocalDate.parse(createDate, formatter);
+        Date date = Date.valueOf(localDate);
+
+
+        //itemDao.insertOrReplaceItems(listId, itemDtoList.getItems());
+
+
     }
 
     /**

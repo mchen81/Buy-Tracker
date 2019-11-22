@@ -10,10 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/items")
@@ -25,6 +28,16 @@ public class ItemsController {
     @Autowired
     private ShoppingHistoryService shoppingHistoryService;
 
+    @ModelAttribute("categoryList")
+    public List<String> categoryMap() {
+        Map<String, Integer> categoryMap = new HashMap<>();
+        categoryMap.put("Food", 1);
+        categoryMap.put("Drink", 2);
+        categoryMap.put("Fruit", 3);
+        categoryMap.put("Ticket", 4);
+        return new ArrayList<>(categoryMap.keySet());
+    }
+
     @GetMapping(value = "/all/{listId}")
     public String showNewForm(Model model, @PathVariable("listId") Long listId) {
         if (listId.equals(0L)) {
@@ -34,6 +47,7 @@ public class ItemsController {
             model.addAttribute("buyingDate", itemDtoList.getCreateDate());
             model.addAttribute("location", itemDtoList.getLocation());
         }
+
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
         model.addAttribute("listId", listId);
@@ -80,7 +94,7 @@ public class ItemsController {
         itemService.saveAll(form.getItems());
         Long listIdNumber = Long.valueOf(listId);
         if (listIdNumber.equals(0L)) {
-            form.setCreateDate(getCurrentDate() );
+            form.setCreateDate(getCurrentDate());
             form.setLocation("San Francisco");
             listIdNumber = shoppingHistoryService.addToHistory(form);
         } else {
