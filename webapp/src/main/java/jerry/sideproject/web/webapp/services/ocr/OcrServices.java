@@ -39,7 +39,7 @@ public class OcrServices {
         String[] lines = text.split("\n");
         long count = 1;
         for (String line : lines) {
-            ItemDto itemDto = splitString(line);
+            ItemDto itemDto = parseReceiptInfo(line);
             if (!itemDto.isEmpty()) {
                 itemDto.setId(count);
                 result.add(itemDto);
@@ -55,7 +55,7 @@ public class OcrServices {
      * @param line one line on receipt
      * @return an Item
      */
-    private ItemDto splitString(String line) {
+    private ItemDto parseReceiptInfo(String line) {
         ItemDto itemDto = new ItemDto();
         String[] words = line.split(" "); // to get the last element(price)
         try {

@@ -55,9 +55,7 @@ public class ItemDto {
         this.price = price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+
 
     @Override
     public int hashCode() {
