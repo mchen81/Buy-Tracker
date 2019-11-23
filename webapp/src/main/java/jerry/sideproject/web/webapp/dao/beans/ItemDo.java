@@ -2,34 +2,25 @@ package jerry.sideproject.web.webapp.dao.beans;
 
 public class ItemDo {
 
-    private long id;
-    private long buyingListId;
-    private long categoryId;
+    private Long shoppingListId;
+    private String category;
     private String name;
     private Double price;
 
-    public long getId() {
-        return id;
+    public Long getShoppingListId() {
+        return shoppingListId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setShoppingListId(Long shoppingListId) {
+        this.shoppingListId = shoppingListId;
     }
 
-    public long getBuyingListId() {
-        return buyingListId;
+    public String getCategory() {
+        return category;
     }
 
-    public void setBuyingListId(long buyingListId) {
-        this.buyingListId = buyingListId;
-    }
-
-    public long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getName() {

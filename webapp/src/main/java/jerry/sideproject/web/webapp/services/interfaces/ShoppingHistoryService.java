@@ -2,9 +2,12 @@ package jerry.sideproject.web.webapp.services.interfaces;
 
 import jerry.sideproject.web.webapp.controller.beans.ItemDtoList;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ShoppingHistoryService {
+
+    void loadHistoryFromDB() throws SQLException;
 
     List<ItemDtoList> findAll();
 

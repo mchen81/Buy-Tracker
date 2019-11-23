@@ -66,6 +66,13 @@ public class ItemServiceImplement implements ItemService {
         }
     }
 
+    @Override
+    public void addItem(ItemDto itemDto) {
+        long nextId = getNextId();
+        itemsDB.put(nextId, itemDto);
+
+    }
+
     /**
      * @return current max id + 1
      */

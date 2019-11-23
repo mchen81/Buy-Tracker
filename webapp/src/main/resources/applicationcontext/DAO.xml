@@ -8,7 +8,7 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <bean id="userDao" class="jerry.sideproject.web.webapp.dao.UserDaoImpl">
+    <bean id="shoppingHistoryDao" class="jerry.sideproject.web.webapp.dao.ShoppingHistoryDaoImpl">
         <property name="dataSource" ref="dataSource" />
     </bean>
 

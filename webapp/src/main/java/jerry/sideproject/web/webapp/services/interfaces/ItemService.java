@@ -2,6 +2,7 @@ package jerry.sideproject.web.webapp.services.interfaces;
 
 import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -33,9 +34,16 @@ public interface ItemService {
 
     /**
      * remove an item by id
+     *
      * @param Id item's id
      */
     void remove(Long Id);
 
+    /**
+     * add one item
+     *
+     * @param itemDto
+     */
+    void addItem(ItemDto itemDto);
 
 }

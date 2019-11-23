@@ -2,6 +2,8 @@ package jerry.sideproject.web.webapp.controller;
 
 import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 import jerry.sideproject.web.webapp.controller.beans.ItemDtoList;
+import jerry.sideproject.web.webapp.dao.interfaces.ItemDao;
+import jerry.sideproject.web.webapp.dao.interfaces.ShoppingHistoryDao;
 import jerry.sideproject.web.webapp.services.interfaces.ItemService;
 import jerry.sideproject.web.webapp.services.interfaces.ShoppingHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,6 +32,17 @@ public class ItemsController {
 
     @Autowired
     private ShoppingHistoryService shoppingHistoryService;
+
+    @Autowired
+    private ItemDao itemDao;
+
+    @Autowired
+    private ShoppingHistoryDao shoppingHistoryDao;
+
+    @PostConstruct
+    public void loadHistory() throws SQLException {
+        shoppingHistoryService.loadHistoryFromDB();
+    }
 
     @ModelAttribute("categoryList")
     public List<String> categoryMap() {
@@ -46,7 +62,6 @@ public class ItemsController {
         anotherList.add("TRANSPORTATION");
         anotherList.add("Entertainment");
         anotherList.add("OTHER");
-
 
 
         return anotherList;
@@ -105,18 +120,22 @@ public class ItemsController {
     }
 
     @PostMapping(value = "/save")
-    public String saveItems(@ModelAttribute ItemDtoList form, @RequestParam String listId, Model model) {
+    public String saveItems(@ModelAttribute ItemDtoList form,
+                            @RequestParam String listId, Model model) throws SQLException {
         itemService.saveAll(form.getItems());
         Long listIdNumber = Long.valueOf(listId);
         if (listIdNumber.equals(0L)) {
             form.setCreateDate(getCurrentDate());
             form.setLocation("San Francisco");
             listIdNumber = shoppingHistoryService.addToHistory(form);
+            //shoppingHistoryDao.insertHistory(form);
+
         } else {
             ItemDtoList editedForm = new ItemDtoList();
             editedForm.setItems(itemService.findAll());
             editedForm.setListId(listIdNumber);
             shoppingHistoryService.editItemDtoList(listIdNumber, editedForm);
+            //shoppingHistoryDao.updateHistory(editedForm, listIdNumber);
         }
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("listId", listId);
@@ -137,16 +156,25 @@ public class ItemsController {
         }
         form.setItems(itemService.findAll());
         shoppingHistoryService.editItemDtoList(Long.valueOf(listId), form);
+
         model.addAttribute("listId", listId);
         return "redirect:/items/all/" + listId;
     }
 
     @PostMapping(value = "/submitToDB")
-    public String submit(Model model, @RequestParam("buyingDate") String buyingDate, @RequestParam String location, @RequestParam Long listId) {
+    public String submit(Model model,
+                         @RequestParam("buyingDate") String buyingDate,
+                         @RequestParam String location,
+                         @RequestParam Long listId) throws SQLException {
+
         ItemDtoList itemDtoList = shoppingHistoryService.getItemDtoListById(listId);
         itemDtoList.setCreateDate(buyingDate);
         itemDtoList.setLocation(location);
         shoppingHistoryService.editItemDtoList(listId, itemDtoList);
+        shoppingHistoryDao.updateHistory(itemDtoList, listId);
+
+        //TODO when to send edition ?????
+
         model.addAttribute("history", shoppingHistoryService.findAll());
         return "redirect:/index";
     }
@@ -160,9 +188,6 @@ public class ItemsController {
     }
 
     private String getCurrentDate() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        String formatDateTime = now.format(formatter);
-        return formatDateTime;
+        return Date.valueOf(LocalDate.now()).toString();
     }
 }

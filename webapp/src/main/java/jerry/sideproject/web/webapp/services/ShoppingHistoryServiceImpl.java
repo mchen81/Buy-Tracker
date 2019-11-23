@@ -1,12 +1,17 @@
 package jerry.sideproject.web.webapp.services;
 
+import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 import jerry.sideproject.web.webapp.controller.beans.ItemDtoList;
+import jerry.sideproject.web.webapp.dao.beans.ItemDo;
 import jerry.sideproject.web.webapp.dao.interfaces.ItemDao;
+import jerry.sideproject.web.webapp.dao.interfaces.ShoppingHistoryDao;
+import jerry.sideproject.web.webapp.services.interfaces.ItemService;
 import jerry.sideproject.web.webapp.services.interfaces.ShoppingHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,6 +27,35 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
     @Autowired
     private ItemDao itemDao;
 
+    @Autowired
+    private ShoppingHistoryDao shoppingHistoryDao;
+
+    @Autowired
+    private ItemService itemService;
+
+    @Override
+    public void loadHistoryFromDB() throws SQLException {
+
+        List<ItemDtoList> itemDtoLists = shoppingHistoryDao.getHisTory();
+
+        for (ItemDtoList itemDtoList : itemDtoLists) {
+            List<ItemDo> itemDoList = itemDao.getItemsByListId(itemDtoList.getListId());
+            List<ItemDto> itemDtos = new ArrayList<>();
+            itemService.clear();
+            for (ItemDo itemDo : itemDoList) {
+                ItemDto itemDto = new ItemDto();
+                itemDto.setName(itemDo.getName());
+                itemDto.setPrice(itemDo.getPrice().toString());
+                itemDto.setCategory(itemDo.getCategory());
+                itemDtos.add(itemDto);
+            }
+            itemService.saveAll(itemDtos);
+            itemDtoList.setItems(itemService.findAll());
+            shoppingHistory.put(itemDtoList.getListId(), itemDtoList);
+        }
+
+    }
+
     @Override
     public List<ItemDtoList> findAll() {
         return new ArrayList<>(shoppingHistory.values());
@@ -31,7 +65,6 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
     public Long addToHistory(ItemDtoList itemDtoList) {
         Long listId = getNextId();
         itemDtoList.setListId(listId);
-        itemDtoList.setUpdated(true);
         shoppingHistory.put(listId, itemDtoList);
         return listId;
     }

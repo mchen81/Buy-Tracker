@@ -1,5 +1,6 @@
 package jerry.sideproject.web.webapp.controller.beans;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,26 +12,15 @@ public class ItemDtoList {
 
     private String location;
 
-    private String createDate;
+    private Date createDate;
 
-    private boolean isUpdated;
 
     public ItemDtoList() {
         this.items = new ArrayList<>();
-        isUpdated = false;
     }
 
     public ItemDtoList(List<ItemDto> items) {
         this.items = items;
-        isUpdated = false;
-    }
-
-    public boolean isUpdated() {
-        return isUpdated;
-    }
-
-    public void setUpdated(boolean updated) {
-        isUpdated = updated;
     }
 
     public List<ItemDto> getItems() {
@@ -39,7 +29,6 @@ public class ItemDtoList {
 
     public void setItems(List<ItemDto> items) {
         this.items = items;
-        isUpdated = false;
     }
 
     public void addItem(ItemDto itemDto) {
@@ -52,25 +41,26 @@ public class ItemDtoList {
 
     public void setListId(Long listId) {
         this.listId = listId;
-        isUpdated = false;
     }
 
     public String getLocation() {
         return location;
     }
 
+    public Date getSqlDate() {
+        return this.createDate;
+    }
+
     public void setLocation(String location) {
         this.location = location;
-        isUpdated = false;
     }
 
     public String getCreateDate() {
-        return createDate;
+        return createDate.toString();
     }
 
     public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-        isUpdated = false;
+        this.createDate = Date.valueOf(createDate);
     }
 
     @Override
