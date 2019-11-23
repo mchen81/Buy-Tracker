@@ -1,0 +1,16 @@
+-- auto-generated definition
+create table PURCHASED_ITEMS
+(
+    ID              int auto_increment
+        primary key,
+    SHOPING_LIST_ID int          not null,
+    CATEGORY_ID     int          not null,
+    ITEM_NAME       varchar(255) not null,
+    ITEM_PRICE      float        not null,
+    constraint PURCHASED_ITEMS_CATEGORIES_ID_fk
+        foreign key (CATEGORY_ID) references CATEGORIES (ID)
+);
+
+create index BUYING_ITEMS_BUYING_LIST_ID_fk
+    on PURCHASED_ITEMS (SHOPING_LIST_ID);
+

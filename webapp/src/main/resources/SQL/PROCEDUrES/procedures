@@ -1,0 +1,51 @@
+
+create procedure clearItemsByListId(IN I_LIST_ID int)
+begin
+    delete from PURCHASED_ITEMS
+        where SHOPING_LIST_ID = I_LIST_ID;
+end;
+
+create procedure getHistory()
+begin
+    select * from SHOPPING_HISTORY;
+end;
+
+create procedure getItemsByShoppingListId(IN I_SHOPPING_LIST_ID int)
+begin
+    select PI.ITEM_NAME, PI.ITEM_PRICE, C.NAME as CATEGORY
+    from PURCHASED_ITEMS AS PI
+    JOIN CATEGORIES C ON PI.CATEGORY_ID = C.ID
+    where I_SHOPPING_LIST_ID = PI.shopping_list_id;
+end;
+
+create procedure insertHistory(IN I_DATE date, IN I_LOCATION varchar(255), OUT O_SHOPPING_LIST_ID int)
+begin
+    insert into SHOPPING_HISTORY(USER_ID, CREATE_DATE, LOCATION)
+    VALUES (1, I_DATE, I_LOCATION);
+    select max(ID) into O_SHOPPING_LIST_ID from SHOPPING_HISTORY;
+end;
+
+
+create procedure insertItem(IN i_list_id int, IN i_category varchar(255), IN i_name varchar(255), IN i_price float)
+begin
+    DECLARE category_id int DEFAULT 3;
+    select c.id into category_id from categories as c where i_category = c.name;
+    INSERT INTO PURCHASED_ITEMS(SHOPING_LIST_ID, CATEGORY_ID, ITEM_NAME, ITEM_PRICE)
+    VALUES (i_list_id, category_id , i_name,i_price);
+end;
+
+create procedure updateHistory(IN I_DATE date, IN I_LOCATION varchar(255), IN I_LIST_ID int)
+begin
+    update SHOPPING_HISTORY
+        set CREATE_DATE = I_DATE,
+            LOCATION = I_LOCATION
+        where I_LIST_ID = ID;
+end;
+
+
+
+
+
+
+
+
