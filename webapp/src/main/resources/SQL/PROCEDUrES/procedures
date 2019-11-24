@@ -43,6 +43,32 @@ begin
 end;
 
 
+create procedure getCategories()
+begin
+    select * from CATEGORIES;
+end;
+
+drop procedure if exists insertOrUpdateHistory;
+create procedure insertOrUpdateHistory(IN I_DATE date, IN I_LOCATION varchar(255), IN I_LIST_ID int)
+begin
+    declare idNotExist boolean default false;
+        select true into idNotExist where (
+            select ID
+            from SHOPPING_HISTORY
+            where I_LIST_ID = ID) IS NULL;
+
+    IF idNotExist THEN
+        insert into SHOPPING_HISTORY(USER_ID, CREATE_DATE, LOCATION)
+        VALUES (1, I_DATE, I_LOCATION);
+    ELSE
+        update SHOPPING_HISTORY
+        set CREATE_DATE = I_DATE,
+            LOCATION = I_LOCATION
+        where I_LIST_ID = ID;
+    END IF;
+end;
+
+
 
 
 
