@@ -5,6 +5,7 @@ import jerry.sideproject.web.webapp.dao.beans.ItemDo;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface ItemDao {
 
@@ -24,5 +25,7 @@ public interface ItemDao {
     void replaceItems(List<ItemDo> itemDoList, Long listId) throws SQLException;
 
     void deleteItemsByListId(Long listId) throws SQLException;
+
+    Map<Long, String > getCategoriesMap() throws SQLException;
 
 }

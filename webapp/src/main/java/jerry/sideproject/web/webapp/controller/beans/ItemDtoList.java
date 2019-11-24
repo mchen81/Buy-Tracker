@@ -14,13 +14,24 @@ public class ItemDtoList {
 
     private Date createDate;
 
+    private boolean isUpdated;
+
+    public boolean isUpdated() {
+        return isUpdated;
+    }
+
+    public void setUpdated(boolean updated) {
+        isUpdated = updated;
+    }
 
     public ItemDtoList() {
         this.items = new ArrayList<>();
+        isUpdated = false;
     }
 
     public ItemDtoList(List<ItemDto> items) {
         this.items = items;
+        isUpdated = false;
     }
 
     public List<ItemDto> getItems() {
@@ -29,10 +40,12 @@ public class ItemDtoList {
 
     public void setItems(List<ItemDto> items) {
         this.items = items;
+        isUpdated = false;
     }
 
     public void addItem(ItemDto itemDto) {
         this.items.add(itemDto);
+        isUpdated = false;
     }
 
     public Long getListId() {
@@ -40,7 +53,10 @@ public class ItemDtoList {
     }
 
     public void setListId(Long listId) {
-        this.listId = listId;
+        if (null != listId && !listId.equals(this.listId)) {
+            isUpdated = false;
+            this.listId = listId;
+        }
     }
 
     public String getLocation() {
@@ -52,15 +68,29 @@ public class ItemDtoList {
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        if (null != location && !location.equals(this.location)) {
+            isUpdated = false;
+            this.location = location;
+        }
     }
 
     public String getCreateDate() {
+        if (createDate == null) {
+            return null;
+        }
         return createDate.toString();
     }
 
     public void setCreateDate(String createDate) {
-        this.createDate = Date.valueOf(createDate);
+        if (this.createDate == null && createDate != null) {
+            this.createDate = Date.valueOf(createDate);
+            isUpdated = false;
+            return;
+        }
+        if (createDate != null && !createDate.equals(this.createDate.toString())) {
+            this.createDate = Date.valueOf(createDate);
+            isUpdated = false;
+        }
     }
 
     @Override
@@ -68,7 +98,6 @@ public class ItemDtoList {
         StringBuilder stringBuilder = new StringBuilder("List Id: ");
         stringBuilder.append(listId);
         stringBuilder.append("\n");
-
         for (ItemDto itemDto : items) {
             stringBuilder.append("Item name: ");
             stringBuilder.append(itemDto.getName());

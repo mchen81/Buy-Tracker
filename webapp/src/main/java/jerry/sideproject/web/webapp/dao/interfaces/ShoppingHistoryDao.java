@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface ShoppingHistoryDao {
 
-    Long insertHistory(ItemDtoList itemDtoList) throws SQLException;
-
     void updateHistory(ItemDtoList newItemList, Long listId) throws SQLException;
 
     List<ItemDtoList> getHisTory() throws SQLException;

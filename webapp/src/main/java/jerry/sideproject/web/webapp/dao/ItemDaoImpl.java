@@ -10,7 +10,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
@@ -23,6 +25,7 @@ public class ItemDaoImpl implements ItemDao {
 
     private static final String SQL_CLEAR_ITEMS = "{CALL clearItemsByListId(?)}";
 
+    private static final String SQL_GET_CATEGORIES = "{CALL getCategories()}";
 
     @Override
     public List<ItemDo> getItemsByListId(Long shoppingListId) throws SQLException {
@@ -48,7 +51,6 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public void insertItems(List<ItemDo> itemDoList, Long listId) throws SQLException {
-
         Connection con = dataSource.getConnection();
         CallableStatement callableStatement = con.prepareCall((SQL_INSERT_ITEM));
         try {
@@ -63,8 +65,6 @@ public class ItemDaoImpl implements ItemDao {
         } finally {
             con.close();
         }
-
-
     }
 
     @Override
@@ -84,6 +84,21 @@ public class ItemDaoImpl implements ItemDao {
         }
     }
 
+    @Override
+    public Map<Long, String> getCategoriesMap() throws SQLException {
+        Connection con = dataSource.getConnection();
+        CallableStatement callableStatement = con.prepareCall(SQL_GET_CATEGORIES);
+        Map<Long, String> categoriesMap = new HashMap<>();
+        try {
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                categoriesMap.put(resultSet.getLong("ID"), resultSet.getString("NAME"));
+            }
+        } finally {
+            con.close();
+        }
+        return categoriesMap;
+    }
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;

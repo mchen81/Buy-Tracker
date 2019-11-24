@@ -16,10 +16,8 @@ import javax.annotation.PostConstruct;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -45,27 +43,15 @@ public class ItemsController {
     }
 
     @ModelAttribute("categoryList")
-    public List<String> categoryMap() {
-        Map<String, Integer> categoryMap = new HashMap<>();
-        categoryMap.put("Food", 1);
-        categoryMap.put("Drink", 2);
-        categoryMap.put("Fruit", 3);
-        categoryMap.put("Ticket", 4);
-
-        categoryMap.put("NONE", 5);
-
-
-        List<String> anotherList = new ArrayList<>();
-        anotherList.add("NONE");
-        anotherList.add("FOOD");
-        anotherList.add("DRINK");
-        anotherList.add("TRANSPORTATION");
-        anotherList.add("Entertainment");
-        anotherList.add("OTHER");
-
-
-        return anotherList;
-        //return new ArrayList<>(categoryMap.keySet());
+    public List<String> categoryMap() throws SQLException {
+        Map<Long, String> categoriesMap = itemDao.getCategoriesMap();
+        List<Long> sortIds = new ArrayList<>(categoriesMap.keySet());
+        Collections.sort(sortIds);
+        List<String> sortedCategoryMap = new ArrayList<>();
+        for (Long id : sortIds) {
+            sortedCategoryMap.add(categoriesMap.get(id));
+        }
+        return sortedCategoryMap;
     }
 
     @GetMapping(value = "/all/{listId}")
@@ -77,7 +63,6 @@ public class ItemsController {
             model.addAttribute("buyingDate", itemDtoList.getCreateDate());
             model.addAttribute("location", itemDtoList.getLocation());
         }
-
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("total", String.format("%.2f", itemService.getTotalAmount()));
         model.addAttribute("listId", listId);
@@ -121,21 +106,19 @@ public class ItemsController {
 
     @PostMapping(value = "/save")
     public String saveItems(@ModelAttribute ItemDtoList form,
-                            @RequestParam String listId, Model model) throws SQLException {
+                            @RequestParam String listId, Model model){
         itemService.saveAll(form.getItems());
         Long listIdNumber = Long.valueOf(listId);
         if (listIdNumber.equals(0L)) {
             form.setCreateDate(getCurrentDate());
             form.setLocation("San Francisco");
             listIdNumber = shoppingHistoryService.addToHistory(form);
-            //shoppingHistoryDao.insertHistory(form);
 
         } else {
             ItemDtoList editedForm = new ItemDtoList();
             editedForm.setItems(itemService.findAll());
             editedForm.setListId(listIdNumber);
             shoppingHistoryService.editItemDtoList(listIdNumber, editedForm);
-            //shoppingHistoryDao.updateHistory(editedForm, listIdNumber);
         }
         model.addAttribute("items", itemService.findAll());
         model.addAttribute("listId", listId);
@@ -156,7 +139,6 @@ public class ItemsController {
         }
         form.setItems(itemService.findAll());
         shoppingHistoryService.editItemDtoList(Long.valueOf(listId), form);
-
         model.addAttribute("listId", listId);
         return "redirect:/items/all/" + listId;
     }
@@ -166,15 +148,15 @@ public class ItemsController {
                          @RequestParam("buyingDate") String buyingDate,
                          @RequestParam String location,
                          @RequestParam Long listId) throws SQLException {
-
         ItemDtoList itemDtoList = shoppingHistoryService.getItemDtoListById(listId);
         itemDtoList.setCreateDate(buyingDate);
         itemDtoList.setLocation(location);
         shoppingHistoryService.editItemDtoList(listId, itemDtoList);
-        shoppingHistoryDao.updateHistory(itemDtoList, listId);
-
-        //TODO when to send edition ?????
-
+        for (ItemDtoList items : shoppingHistoryService.findAll()) {
+            if (!items.isUpdated()) {
+                shoppingHistoryDao.updateHistory(itemDtoList, itemDtoList.getListId());
+            }
+        }
         model.addAttribute("history", shoppingHistoryService.findAll());
         return "redirect:/index";
     }

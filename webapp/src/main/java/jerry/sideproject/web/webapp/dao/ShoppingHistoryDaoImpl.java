@@ -17,25 +17,9 @@ public class ShoppingHistoryDaoImpl implements ShoppingHistoryDao {
 
     private DataSource dataSource;
 
-    private static final String SQL_INSERT_HISTORY = "{CALL insertHistory(?,?,?)}";
-
-    private static final String SQL_UPDATE_HISTORY = "{CALL updateHistory(?,?,?)}";
+    private static final String SQL_UPDATE_HISTORY = "{CALL insertOrUpdateHistory(?,?,?)}";
 
     private static final String SQL_GET_HISTORY = "{CALL getHistory()}";
-
-    @Override
-    public Long insertHistory(ItemDtoList itemDtoList) throws SQLException {
-        Connection con = dataSource.getConnection();
-        try {
-            CallableStatement callableStatement = con.prepareCall((SQL_INSERT_HISTORY));
-            callableStatement.setDate("I_DATE", itemDtoList.getSqlDate());
-            callableStatement.setString("I_LOCATION", itemDtoList.getLocation());
-            callableStatement.execute();
-            return callableStatement.getLong(2);
-        } finally {
-            con.close();
-        }
-    }
 
     @Override
     public void updateHistory(ItemDtoList newItemList, Long listId) throws SQLException {
@@ -55,7 +39,6 @@ public class ShoppingHistoryDaoImpl implements ShoppingHistoryDao {
     public List<ItemDtoList> getHisTory() throws SQLException {
         List<ItemDtoList> history = new ArrayList<>();
         Connection con = dataSource.getConnection();
-
         try {
             CallableStatement callableStatement = con.prepareCall((SQL_GET_HISTORY));
             ResultSet resultSet = callableStatement.executeQuery();
@@ -66,12 +49,9 @@ public class ShoppingHistoryDaoImpl implements ShoppingHistoryDao {
                 itemDtoList.setLocation(resultSet.getString("LOCATION"));
                 history.add(itemDtoList);
             }
-
-
         } finally {
             con.close();
         }
-
         return history;
     }
 

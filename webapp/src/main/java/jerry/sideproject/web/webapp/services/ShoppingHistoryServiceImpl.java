@@ -35,9 +35,7 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
 
     @Override
     public void loadHistoryFromDB() throws SQLException {
-
         List<ItemDtoList> itemDtoLists = shoppingHistoryDao.getHisTory();
-
         for (ItemDtoList itemDtoList : itemDtoLists) {
             List<ItemDo> itemDoList = itemDao.getItemsByListId(itemDtoList.getListId());
             List<ItemDto> itemDtos = new ArrayList<>();
@@ -51,9 +49,9 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
             }
             itemService.saveAll(itemDtos);
             itemDtoList.setItems(itemService.findAll());
+            itemDtoList.setUpdated(true);
             shoppingHistory.put(itemDtoList.getListId(), itemDtoList);
         }
-
     }
 
     @Override
@@ -102,23 +100,25 @@ public class ShoppingHistoryServiceImpl implements ShoppingHistoryService {
 
     @Override
     public void updateData(Long listId) {
-
         ItemDtoList itemDtoList = shoppingHistory.get(listId);
         String createDate = itemDtoList.getCreateDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         LocalDate localDate = LocalDate.parse(createDate, formatter);
         Date date = Date.valueOf(localDate);
-
-
         //itemDao.insertOrReplaceItems(listId, itemDtoList.getItems());
-
-
     }
 
     /**
      * @return current max id + 1
      */
     private Long getNextId() {
-        return (long) (shoppingHistory.size() + 1);
+        long maxId = 0;
+        for (long id : shoppingHistory.keySet()) {
+            maxId = Math.max(maxId, id);
+        }
+        if (maxId == 0) {
+            return 1L;
+        }
+        return maxId + 1;
     }
 }
