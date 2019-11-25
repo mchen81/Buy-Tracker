@@ -2,6 +2,7 @@ package jerry.sideproject.web.webapp.controller;
 
 import jerry.sideproject.web.webapp.controller.beans.ItemDto;
 import jerry.sideproject.web.webapp.controller.beans.ItemDtoList;
+import jerry.sideproject.web.webapp.dao.beans.ItemDo;
 import jerry.sideproject.web.webapp.dao.interfaces.ItemDao;
 import jerry.sideproject.web.webapp.dao.interfaces.ShoppingHistoryDao;
 import jerry.sideproject.web.webapp.services.interfaces.ItemService;
@@ -106,7 +107,7 @@ public class ItemsController {
 
     @PostMapping(value = "/save")
     public String saveItems(@ModelAttribute ItemDtoList form,
-                            @RequestParam String listId, Model model){
+                            @RequestParam String listId, Model model) {
         itemService.saveAll(form.getItems());
         Long listIdNumber = Long.valueOf(listId);
         if (listIdNumber.equals(0L)) {
@@ -155,6 +156,19 @@ public class ItemsController {
         for (ItemDtoList items : shoppingHistoryService.findAll()) {
             if (!items.isUpdated()) {
                 shoppingHistoryDao.updateHistory(itemDtoList, itemDtoList.getListId());
+                itemService.clear();
+                // replace items
+                List<ItemDo> itemDos = new ArrayList<>();
+                for (ItemDto itemDto : items.getItems()) {
+                    ItemDo itemDo = new ItemDo();
+                    itemDo.setCategory(itemDto.getCategory());
+                    itemDo.setShoppingListId(itemDtoList.getListId());
+                    itemDo.setPrice(itemDto.getPrice());
+                    itemDo.setName(itemDto.getName());
+                    itemDos.add(itemDo);
+                }
+                itemDao.replaceItems(itemDos, items.getListId());
+                items.setUpdated(true);
             }
         }
         model.addAttribute("history", shoppingHistoryService.findAll());

@@ -79,6 +79,7 @@ public class ItemDaoImpl implements ItemDao {
         CallableStatement callableStatement = con.prepareCall(SQL_CLEAR_ITEMS);
         try {
             callableStatement.setLong("I_LIST_ID", listId);
+            callableStatement.execute();
         } finally {
             con.close();
         }
